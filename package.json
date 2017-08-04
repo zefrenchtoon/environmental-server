@@ -1,0 +1,17 @@
+{
+    "name": "EnvironmentalServer",
+	"description": "",
+	"repository": "",
+	"license": "MIT",
+    "version": "1.0.0",
+    "keywords": ["sensor", "server"],
+    "author": "zefrenchtoon",
+    "contributors": [],
+    "dependencies": {
+		"body": "latest",
+		"sqlite3": "latest"
+	},
+    "scripts": {
+        "start":"node main.js"
+    }
+}
