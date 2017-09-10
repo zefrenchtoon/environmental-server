@@ -1,0 +1,614 @@
+swagger: "2.0"
+info:
+  description: "This is a server used to store and retrieve environmental data."
+  version: "1.0.0"
+  title: "Swagger Environmental Server"
+  termsOfService: ""
+  license:
+    name: "MIT"
+host: "localhost"
+basePath: "/"
+tags:
+- name: "Sensor"
+  description: "Data about sensors"
+- name: "Unit"
+  description: "Units used by sensors"
+- name: "DataType"
+  description: "Data types managed by sensors"
+- name: "Data"
+  description: "Data to/from sensors"
+- name: "Graph"
+  description: "Graph vizualization of data"
+schemes:
+- "http"
+paths:
+  /data:
+    post:
+      tags:
+      - "Data"
+      summary: "Adds a new data to the database"
+      description: ""
+      operationId: "addData"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Data object that needs to be added to the store"
+        required: true
+        schema:
+          $ref: "#/definitions/Data"
+      responses:
+        405:
+          description: "Invalid input"
+    get:
+      tags:
+      - "Data"
+      summary: "Gets all data"
+      description: "Gets all data present in database"
+      operationId: "getAllData"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Data"
+        404:
+          description: "No data in database"
+  /data/{timestamp}:
+    get:
+      tags:
+      - "Data"
+      summary: "Gets data at timestamp"
+      description: "Returns a single data"
+      operationId: "getDataByTimestamp"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "timestamp"
+        in: "path"
+        description: "timestamp of data to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Data"
+        400:
+          description: "Invalid timestamp supplied"
+        404:
+          description: "Data not found"
+  /sensor:
+    get:
+      tags:
+      - "Sensor"
+      summary: "Gets all sensors data"
+      description: "Returns a list of sensors data"
+      operationId: "getSensors"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Sensor"
+    post:
+      tags:
+      - "Sensor"
+      summary: "Adds a new sensor into the database"
+      description: "Adds a new sensor into the database"
+      operationId: "addSensor"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "sensor to add"
+        required: true
+        schema:
+          $ref: "#/definitions/Sensor"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Sensor"
+        400:
+          description: "Invalid Sensor"
+  /unit:
+    get:
+      tags:
+      - "Unit"
+      summary: "Gets all units data"
+      description: "Returns a list of units data"
+      operationId: "getUnits"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Unit"
+    post:
+      tags:
+      - "Unit"
+      summary: "Adds a new unit into the database"
+      description: "Adds a new unit into the database"
+      operationId: "addUnit"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "unit to add"
+        required: true
+        schema:
+          $ref: "#/definitions/Unit"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Unit"
+        400:
+          description: "Invalid Unit"
+  /data_type:
+    get:
+      tags:
+      - "DataType"
+      summary: "Gets all data_types data"
+      description: "Returns a list of data types data"
+      operationId: "getDataTypes"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/DataType"
+    post:
+      tags:
+      - "DataType"
+      summary: "Adds a new data_type into the database"
+      description: "Adds a new data type into the database"
+      operationId: "addDataType"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "data type to add"
+        required: true
+        schema:
+          $ref: "#/definitions/DataType"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/DataType"
+        400:
+          description: "Invalid DataType"
+  /graph:
+    get:
+      tags:
+      - "Graph"
+      summary: "Displays graphs"
+      description: ""
+      operationId: "displayGraphs"
+      produces:
+      - "text/html"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+#  /user:
+#    post:
+#      tags:
+#      - "user"
+#      summary: "Create user"
+#      description: "This can only be done by the logged in user."
+#      operationId: "createUser"
+#      produces:
+#      - "application/xml"
+#      - "application/json"
+#      parameters:
+#      - in: "body"
+#        name: "body"
+#        description: "Created user object"
+#        required: true
+#        schema:
+#          $ref: "#/definitions/User"
+#      responses:
+#        default:
+#          description: "successful operation"
+#  /user/createWithArray:
+#    post:
+#      tags:
+#      - "user"
+#      summary: "Creates list of users with given input array"
+#      description: ""
+#      operationId: "createUsersWithArrayInput"
+#      produces:
+#      - "application/xml"
+#      - "application/json"
+#      parameters:
+#      - in: "body"
+#        name: "body"
+#        description: "List of user object"
+#        required: true
+#        schema:
+#          type: "array"
+#          items:
+#            $ref: "#/definitions/User"
+#      responses:
+#        default:
+#          description: "successful operation"
+#  /user/createWithList:
+#    post:
+#      tags:
+#      - "user"
+#      summary: "Creates list of users with given input array"
+#      description: ""
+#      operationId: "createUsersWithListInput"
+#      produces:
+#      - "application/xml"
+#      - "application/json"
+#      parameters:
+#      - in: "body"
+#        name: "body"
+#        description: "List of user object"
+#        required: true
+#        schema:
+#          type: "array"
+#          items:
+#            $ref: "#/definitions/User"
+#      responses:
+#        default:
+#          description: "successful operation"
+#  /user/login:
+#    get:
+#      tags:
+#      - "user"
+#      summary: "Logs user into the system"
+#      description: ""
+#      operationId: "loginUser"
+#      produces:
+#      - "application/xml"
+#      - "application/json"
+#      parameters:
+#      - name: "username"
+#        in: "query"
+#        description: "The user name for login"
+#        required: true
+#        type: "string"
+#      - name: "password"
+#        in: "query"
+#        description: "The password for login in clear text"
+#        required: true
+#        type: "string"
+#      responses:
+#        200:
+#          description: "successful operation"
+#          schema:
+#            type: "string"
+#          headers:
+#            X-Rate-Limit:
+#              type: "integer"
+#              format: "int32"
+#              description: "calls per hour allowed by the user"
+#            X-Expires-After:
+#              type: "string"
+#              format: "date-time"
+#              description: "date in UTC when token expires"
+#        400:
+#          description: "Invalid username/password supplied"
+#  /user/logout:
+#    get:
+#      tags:
+#      - "user"
+#      summary: "Logs out current logged in user session"
+#      description: ""
+#      operationId: "logoutUser"
+#      produces:
+#      - "application/xml"
+#      - "application/json"
+#      parameters: []
+#      responses:
+#        default:
+#          description: "successful operation"
+#  /user/{username}:
+#    get:
+#      tags:
+#      - "user"
+#      summary: "Get user by user name"
+#      description: ""
+#      operationId: "getUserByName"
+#      produces:
+#      - "application/xml"
+#      - "application/json"
+#      parameters:
+#      - name: "username"
+#        in: "path"
+#        description: "The name that needs to be fetched. Use user1 for testing. "
+#        required: true
+#        type: "string"
+#      responses:
+#        200:
+#          description: "successful operation"
+#          schema:
+#            $ref: "#/definitions/User"
+#        400:
+#          description: "Invalid username supplied"
+#        404:
+#          description: "User not found"
+#    put:
+#      tags:
+#      - "user"
+#      summary: "Updated user"
+#      description: "This can only be done by the logged in user."
+#      operationId: "updateUser"
+#      produces:
+#      - "application/xml"
+#      - "application/json"
+#      parameters:
+#      - name: "username"
+#        in: "path"
+#        description: "name that need to be updated"
+#        required: true
+#        type: "string"
+#      - in: "body"
+#        name: "body"
+#        description: "Updated user object"
+#        required: true
+#        schema:
+#          $ref: "#/definitions/User"
+#      responses:
+#        400:
+#          description: "Invalid user supplied"
+#        404:
+#          description: "User not found"
+#    delete:
+#      tags:
+#      - "user"
+#      summary: "Delete user"
+#      description: "This can only be done by the logged in user."
+#      operationId: "deleteUser"
+#      produces:
+#      - "application/xml"
+#      - "application/json"
+#      parameters:
+#      - name: "username"
+#        in: "path"
+#        description: "The name that needs to be deleted"
+#        required: true
+#        type: "string"
+#      responses:
+#        400:
+#          description: "Invalid username supplied"
+#        404:
+#          description: "User not found"
+#securityDefinitions:
+#  petstore_auth:
+#    type: "oauth2"
+#    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
+#    flow: "implicit"
+#    scopes:
+#      write:pets: "modify pets in your account"
+#      read:pets: "read your pets"
+#  api_key:
+#    type: "apiKey"
+#    name: "api_key"
+#    in: "header"
+definitions:
+  Data:
+    type: "object"
+    properties:
+      timestamp:
+        type: "integer"
+        format: "int64"
+      value:
+        type: "number"
+      data_type:
+          $ref: "#/definitions/DataType"
+    xml:
+      name: "DataType"
+  Unit:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+    xml:
+      name: "Unit"
+  DataType:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      unit:
+          $ref: "#/definitions/Unit"
+    xml:
+      name: "DataType"
+  Sensor:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      data_types:
+        type: "array"
+        xml:
+          name: "data_types"
+          wrapped: true
+        items:
+          $ref: "#/definitions/DataType"
+    xml:
+      name: "Sensor"
+  SensorsModule:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+      sensors:
+        type: "array"
+        xml:
+          name: "sensors"
+          wrapped: true
+        items:
+          $ref: "#/definitions/Sensor"
+    xml:
+      name: "Sensor"
+#  Order:
+#    type: "object"
+#    properties:
+#      id:
+#        type: "integer"
+#        format: "int64"
+#      petId:
+#        type: "integer"
+#        format: "int64"
+#      quantity:
+#        type: "integer"
+#        format: "int32"
+#      shipDate:
+#        type: "string"
+#        format: "date-time"
+#      status:
+#        type: "string"
+#        description: "Order Status"
+#        enum:
+#        - "placed"
+#        - "approved"
+#        - "delivered"
+#      complete:
+#        type: "boolean"
+#        default: false
+#    xml:
+#      name: "Order"
+#  Category:
+#    type: "object"
+#    properties:
+#      id:
+#        type: "integer"
+#        format: "int64"
+#      name:
+#        type: "string"
+#    xml:
+#      name: "Category"
+#  User:
+#    type: "object"
+#    properties:
+#      id:
+#        type: "integer"
+#        format: "int64"
+#      username:
+#        type: "string"
+#      firstName:
+#        type: "string"
+#      lastName:
+#        type: "string"
+#      email:
+#        type: "string"
+#      password:
+#        type: "string"
+#      phone:
+#        type: "string"
+#      userStatus:
+#        type: "integer"
+#        format: "int32"
+#        description: "User Status"
+#    xml:
+#      name: "User"
+#  Tag:
+#    type: "object"
+#    properties:
+#      id:
+#        type: "integer"
+#        format: "int64"
+#      name:
+#        type: "string"
+#    xml:
+#      name: "Tag"
+#  Pet:
+#    type: "object"
+#    required:
+#    - "name"
+#    - "photoUrls"
+#    properties:
+#      id:
+#        type: "integer"
+#        format: "int64"
+#      category:
+#        $ref: "#/definitions/Category"
+#      name:
+#        type: "string"
+#        example: "doggie"
+#      photoUrls:
+#        type: "array"
+#        xml:
+#          name: "photoUrl"
+#          wrapped: true
+#        items:
+#          type: "string"
+#      tags:
+#        type: "array"
+#        xml:
+#          name: "tag"
+#          wrapped: true
+#        items:
+#          $ref: "#/definitions/Tag"
+#      status:
+#        type: "string"
+#        description: "pet status in the store"
+#        enum:
+#        - "available"
+#        - "pending"
+#        - "sold"
+#    xml:
+#      name: "Pet"
+#  ApiResponse:
+#    type: "object"
+#    properties:
+#      code:
+#        type: "integer"
+#        format: "int32"
+#      type:
+#        type: "string"
+#      message:
+#        type: "string"
+#externalDocs:
+#  description: "Find out more about Swagger"
+#  url: "http://swagger.io"
